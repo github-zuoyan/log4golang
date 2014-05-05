@@ -9,10 +9,19 @@ package log
 import (
 //	"sync"
 //	"os"
-	"fmt"
+
 )
 
 
-func hello(){
-	fmt.Println("nimei")
+func Hello() string {
+	return "nimei"
 }
+
+
+
+
+
+
+
+
+
