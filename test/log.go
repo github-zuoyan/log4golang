@@ -6,8 +6,6 @@ package main
 import (
 	"github.com/cz-it/log4golang/log"
 	"fmt"
-//	"os"
-//	"time"
 )
 
 func main(){
@@ -18,6 +16,11 @@ func main(){
 	}
 	logger := log.NewLogger("./a/b","test","nimei",log.DEBUG)
 	logger.Debug("logger's debug")
+	logger.Info("logger's info")
+	logger.Warning("logger's Waring")
+	logger.Trace("logger's Trace")
+	logger.Error("logger's error")
+	logger.Fatal("logger's fatal")
 
 	log.Debug("Debug")
 	log.Info("Info")
@@ -25,6 +28,8 @@ func main(){
 	log.Trace("Trace")
 	log.Error("Error")
 	log.Fatal("fatal end")
+
+	log.Debug("","logger is",logger)
 }
 
 
