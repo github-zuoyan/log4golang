@@ -44,7 +44,7 @@ type Logger struct {
 	buf        []byte
 	path       string
 	baseName   string
-    logName    string
+	logName    string
 	debugOutputer Outputer
 	debugSwitch bool
 	callDepth  int
