@@ -49,18 +49,18 @@ type Logger struct {
 	debugSwitch bool
 	callDepth  int
 }
-var loggers map[string] *Logger
+var _loggers map[string] *Logger
 var _logger *Logger
 
 func Init() error {
-	loggers = make(map[string] *Logger)
+	_loggers = make(map[string] *Logger)
 	_logger = NewLogger("./","log","Log4Golang",DEBUG)
 	_logger.SetCallDepth(3)
 	return nil
 }
 
 func GetLogger(logName string) *Logger{
-	logger,err := loggers[logName]
+	logger,err := _loggers[logName]
 	if err != true{
 		return nil
 	}
@@ -98,7 +98,7 @@ func NewLogger(path,baseName,logName string,level Level)( *Logger){
 	logger.debugOutputer = STD
 	logger.callDepth     = 2
 
-	loggers[logName] = logger
+	_loggers[logName] = logger
 	return logger
 }
 
@@ -203,6 +203,9 @@ func (l *Logger) Debug(format string,v... interface{}) error {
 	if ! l.debugSwitch {
 		return nil
 	}
+	if l.level > DEBUG{
+		return nil
+	}
 
 	if l.debugOutputer == STD {
 		fd  = os.Stdin
@@ -218,27 +221,44 @@ func (l *Logger) Debug(format string,v... interface{}) error {
 }
 
 func (l *Logger) Info(format string,v...interface{}) error{
+	if l.level > INFO {
+		return nil
+	}
+	
 	err := l.Output(l.logFd,"[INFO]","",format,v...)
 	return err
 }
 
 func (l *Logger) Warning(format string,v...interface{}) error{
+	if l.level > WARNING {
+		return nil
+	}
 	err := l.Output(l.logFd,"[WARNING]","",format,v...)
 	return err
 }
 
 
 func (l *Logger) Trace(format string,v...interface{}) error{
+	if l.level > TRACE{
+		return nil
+	}
 	err := l.Output(l.trcFd,"[TRACE]","["+l.getTime()+"]["+l.getFileLine()+"]",format,v...)
 	return err
 }
 
 func (l *Logger) Error(format string,v...interface{}) error{
+	if l.level > ERROR {
+		return nil
+	}
 	err := l.Output(l.errFd,"[ERROR]","["+l.getTime()+"]["+l.getFileLine()+"]",format,v...)
 	return err
 }
 
 func (l *Logger) Fatal(format string,v... interface{}) error{
+	if l.level > FATAL{
+		return nil
+	}
+	
 	err := l.Output(l.errFd,"[FATAL]","["+l.getTime()+"]["+l.getFileLine()+"]",format,v...)
 	return err
 }
